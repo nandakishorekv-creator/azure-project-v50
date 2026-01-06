@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+      xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+      xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+        http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+        http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+
+  <sub-flow name="readiness-check-subflow" doc:name="Salesforce Readiness Check" doc:id="278d5d5e-4adf-c884-6916-80e78642eb6c">
+    <try doc:name="Try" doc:id="0f09116a-871c-f15d-4507-31835d0bb28f">
+      <salesforce:query config-ref="Salesforce_Config"></salesforce:query>
+      <error-handler>
+        <on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="5b037dee-12e0-c51b-2941-b83a84a8c1b4">
+          <logger level="INFO" doc:name="Logger" doc:id="22560366-bcf8-3cc9-8aef-b901d21e4e84" message="Salesforce health check failed"></logger>
+        </on-error-continue>
+      </error-handler>
+    </try>
+    <ee:transform doc:name="Readiness Response" doc:id="1131e045-8a8e-1506-5018-6fb0ee555d1c">
+      <ee:message>
+        <ee:set-payload>
+          %dw 2.0
+output application/json
+---
+{
+	servicename: "salesforce",
+	status: if(payload[0].Id == null)
+		"down"
+	else
+		"up"
+}
+        </ee:set-payload>
+      </ee:message>
+    </ee:transform>
+  </sub-flow>
+
+</mule>

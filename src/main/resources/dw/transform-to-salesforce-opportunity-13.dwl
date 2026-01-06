@@ -1,0 +1,10 @@
+%dw 2.0
+output application/java
+---
+[{
+  Id: attributes.uriParams.id,
+  Name: payload.name,
+  StageName: payload.stageName,
+  CloseDate: payload.closeDate,
+  Amount: payload.amount default null
+}]

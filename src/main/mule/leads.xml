@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+      xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+      xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+        http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+        http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
+
+  <flow name="post-leads" doc:name="post-leads" doc:id="post-leads-flow">
+    <ee:transform doc:name="Transform to Salesforce Lead" doc:id="transform-lead-create">
+      <ee:message doc:id="doc-512debf4">
+        <ee:set-payload doc:id="doc-026e2b1b" resource="dw/transform-to-salesforce-lead-1.dwl"></ee:set-payload>
+      </ee:message>
+    </ee:transform>
+    <salesforce:create config-ref="Salesforce_Config" type="Lead" doc:name="Create Lead" doc:id="sf-create-lead"></salesforce:create>
+    <ee:transform doc:name="Transform Response" doc:id="transform-lead-response">
+      <ee:message doc:id="doc-2d536dcc">
+        <ee:set-payload doc:id="doc-85dfe479" resource="dw/transform-response-2.dwl"></ee:set-payload>
+      </ee:message>
+    </ee:transform>
+    <error-handler ref="globalErrorHandler"></error-handler>
+  </flow>
+
+  <flow name="get-leads-by-id" doc:name="get-leads-by-id" doc:id="get-leads-by-id-flow">
+    <ee:transform doc:name="Set Query" doc:id="transform-lead-query">
+      <ee:message doc:id="doc-1b3ec445">
+        <ee:set-payload doc:id="doc-f8b248cd" resource="dw/set-query-3.dwl"></ee:set-payload>
+      </ee:message>
+    </ee:transform>
+    <salesforce:query config-ref="Salesforce_Config"></salesforce:query>
+    <ee:transform doc:name="Transform Response" doc:id="transform-lead-read-response">
+      <ee:message doc:id="doc-e0bdb15b">
+        <ee:set-payload doc:id="doc-36e8163a" resource="dw/transform-response-4.dwl"></ee:set-payload>
+      </ee:message>
+    </ee:transform>
+    <error-handler ref="globalErrorHandler"></error-handler>
+  </flow>
+
+  <flow name="put-leads-by-id" doc:name="put-leads-by-id" doc:id="put-leads-by-id-flow">
+    <ee:transform doc:name="Transform to Salesforce Lead" doc:id="transform-lead-update">
+      <ee:message doc:id="doc-28765f5f">
+        <ee:set-payload doc:id="doc-efee35b7" resource="dw/transform-to-salesforce-lead-5.dwl"></ee:set-payload>
+      </ee:message>
+    </ee:transform>
+    <salesforce:update config-ref="Salesforce_Config" type="Lead" doc:name="Update Lead" doc:id="sf-update-lead"></salesforce:update>
+    <ee:transform doc:name="Transform Response" doc:id="transform-lead-update-response">
+      <ee:message doc:id="doc-66e86847">
+        <ee:set-payload doc:id="doc-93d8c390" resource="dw/transform-response-6.dwl"></ee:set-payload>
+      </ee:message>
+    </ee:transform>
+    <error-handler ref="globalErrorHandler"></error-handler>
+  </flow>
+
+  <flow name="delete-leads-by-id" doc:name="delete-leads-by-id" doc:id="delete-leads-by-id-flow">
+    <ee:transform doc:name="Prepare Delete" doc:id="transform-lead-delete">
+      <ee:message doc:id="doc-9c802d40">
+        <ee:set-payload doc:id="doc-0a351c89" resource="dw/prepare-delete-7.dwl"></ee:set-payload>
+      </ee:message>
+    </ee:transform>
+    <salesforce:delete config-ref="Salesforce_Config" doc:name="Delete Lead" doc:id="sf-delete-lead"></salesforce:delete>
+    <ee:transform doc:name="Transform Response" doc:id="transform-lead-delete-response">
+      <ee:message doc:id="doc-29eb7e7e">
+        <ee:set-payload doc:id="doc-ce762f3a" resource="dw/transform-response-8.dwl"></ee:set-payload>
+      </ee:message>
+    </ee:transform>
+    <error-handler ref="globalErrorHandler"></error-handler>
+  </flow>
+
+</mule>

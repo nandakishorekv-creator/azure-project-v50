@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:apikit="http://www.mulesoft.org/schema/mule/apikit"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xmlns:http="http://www.mulesoft.org/schema/mule/http"
+      xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+        http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+  <apikit:config name="azure-project-v50-apikit-config" raml="api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" doc:name="APIKit Router Config"></apikit:config>
+
+  <flow name="azure-project-v50-api-main" doc:name="azure-project-v50 API Main" doc:id="c2e641fa-71f5-f129-5e3a-d1af4cfd7898">
+    <http:listener path="/api/${api.majorVersion}/*" config="HTTPS_Listener_config" doc:name="HTTP Listener" doc:id="9e105a23-d0a0-e7ff-92da-afbf8db5358a">
+      <http:response statusCode="#[vars.httpStatus default 200]">
+        <http:headers>
+          #[vars.outboundHeaders default {}]
+        </http:headers>
+      </http:response>
+      <http:error-response statusCode="#[vars.httpStatus default 500]">
+        <http:body>
+          #[payload]
+        </http:body>
+        <http:headers>
+          #[vars.outboundHeaders default {}]
+        </http:headers>
+      </http:error-response>
+    </http:listener>
+    <apikit:router config-ref="azure-project-v50-apikit-config" doc:name="APIKit Router" doc:id="ea82c3af-943d-13ad-5658-f953d5794d39"></apikit:router>
+  </flow>
+
+  <flow name="post:\leads:application\json:azure-project-v50-apikit-config" doc:name="post:\leads:application\json:azure-project-v50-apikit-config" doc:id="999ece6d-4f36-458b-8b9e-a41c02d4126f">
+    <flow-ref doc:name="post-leads" doc:id="ac3c8f07-7871-eb3f-fa8b-96c6f90ee40e" name="post-leads"></flow-ref>
+  </flow>
+
+  <flow name="get:\leads\(id):azure-project-v50-apikit-config" doc:name="get:\leads\(id):azure-project-v50-apikit-config" doc:id="9ebe47e5-ae24-d6c2-e8dd-1a43e848b913">
+    <flow-ref doc:name="get-leads-by-id" doc:id="757add0f-56ca-c2b6-b168-3a57369312e9" name="get-leads-by-id"></flow-ref>
+  </flow>
+
+  <flow name="put:\leads\(id):application\json:azure-project-v50-apikit-config" doc:name="put:\leads\(id):application\json:azure-project-v50-apikit-config" doc:id="d00422b6-d4f3-05ed-6f6f-95cac93c5aab">
+    <flow-ref doc:name="put-leads-by-id" doc:id="1f882dd8-6030-cdf2-33fc-bffde283e7c3" name="put-leads-by-id"></flow-ref>
+  </flow>
+
+  <flow name="delete:\leads\(id):azure-project-v50-apikit-config" doc:name="delete:\leads\(id):azure-project-v50-apikit-config" doc:id="3e8a8365-d49f-706c-03e7-1c3554df7da6">
+    <flow-ref doc:name="delete-leads-by-id" doc:id="6ac03aea-2068-beb4-3ba8-d50002a0398d" name="delete-leads-by-id"></flow-ref>
+  </flow>
+
+  <flow name="post:\opportunities:application\json:azure-project-v50-apikit-config" doc:name="post:\opportunities:application\json:azure-project-v50-apikit-config" doc:id="13d48ffa-528b-56c1-3af4-6199481b588c">
+    <flow-ref doc:name="post-opportunities" doc:id="a571f7fc-1896-248a-21b6-0345b40cf2ff" name="post-opportunities"></flow-ref>
+  </flow>
+
+  <flow name="get:\opportunities\(id):azure-project-v50-apikit-config" doc:name="get:\opportunities\(id):azure-project-v50-apikit-config" doc:id="81fabd46-26ed-bdd6-aa5d-a434f3677ef5">
+    <flow-ref doc:name="get-opportunities-by-id" doc:id="095a480e-200a-b72d-2edc-e3444cf56a38" name="get-opportunities-by-id"></flow-ref>
+  </flow>
+
+  <flow name="put:\opportunities\(id):application\json:azure-project-v50-apikit-config" doc:name="put:\opportunities\(id):application\json:azure-project-v50-apikit-config" doc:id="a70b06d5-0e55-4003-f6cc-1e4fb15100c5">
+    <flow-ref doc:name="put-opportunities-by-id" doc:id="db450a67-537f-105d-bd69-4e2a15c63c57" name="put-opportunities-by-id"></flow-ref>
+  </flow>
+
+  <flow name="delete:\opportunities\(id):azure-project-v50-apikit-config" doc:name="delete:\opportunities\(id):azure-project-v50-apikit-config" doc:id="960b02ca-24a8-d2b5-6ab9-26938b3d3ed5">
+    <flow-ref doc:name="delete-opportunities-by-id" doc:id="135358be-dd43-ab6e-042c-fdaf16a5db1e" name="delete-opportunities-by-id"></flow-ref>
+  </flow>
+
+  <flow name="get:/readiness:azure-project-v50-apikit-config" doc:name="get:/readiness:azure-project-v50-apikit-config" doc:id="d7adde5c-6d26-ba3d-ee51-68335078bea8">
+    <flow-ref doc:name="readiness-check-subflow" doc:id="9c14b234-71f2-cbe9-41c5-51ee5fc2e486" name="readiness-check-subflow"></flow-ref>
+  </flow>
+
+</mule>

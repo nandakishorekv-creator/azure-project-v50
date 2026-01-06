@@ -1,0 +1,120 @@
+#%RAML 1.0
+title: azure-project-v50
+version: v1
+baseUri: https://api.example.com/{version}
+mediaType: application/json
+
+/leads:
+  post:
+    description: "Create a new leads"
+    displayName: "Create Leads"
+    body:
+      application/json:
+        type: !include resources/schemas/PostLeadsRequest.raml
+        example: !include resources/examples/PostLeadsRequest.json
+    responses:
+      200:
+        body:
+          application/json:
+            type: !include resources/schemas/PostLeadsResponse.raml
+            example: !include resources/examples/PostLeadsResponse.json
+
+/leads/{id}:
+  uriParameters:
+    id:
+      type: integer
+      required: true
+  get:
+    description: "Retrieve a specific leads by ID"
+    displayName: "Get Leads"
+    responses:
+      200:
+        body:
+          application/json:
+            type: !include resources/schemas/GetLeadsIdResponse.raml
+            example: !include resources/examples/GetLeadsIdResponse.json
+  put:
+    description: "Update an existing leads"
+    displayName: "Update Leads"
+    body:
+      application/json:
+        type: !include resources/schemas/PutLeadsIdRequest.raml
+        example: !include resources/examples/PutLeadsIdRequest.json
+    responses:
+      200:
+        body:
+          application/json:
+            type: !include resources/schemas/PutLeadsIdResponse.raml
+            example: !include resources/examples/PutLeadsIdResponse.json
+  delete:
+    description: "Delete a specific leads"
+    displayName: "Delete Leads"
+    responses:
+      200:
+        body:
+          application/json:
+            type: !include resources/schemas/DeleteLeadsIdResponse.raml
+            example: !include resources/examples/DeleteLeadsIdResponse.json
+
+/opportunities:
+  post:
+    description: "Create a new opportunities"
+    displayName: "Create Opportunities"
+    body:
+      application/json:
+        type: !include resources/schemas/PostOpportunitiesRequest.raml
+        example: !include resources/examples/PostOpportunitiesRequest.json
+    responses:
+      200:
+        body:
+          application/json:
+            type: !include resources/schemas/PostOpportunitiesResponse.raml
+            example: !include resources/examples/PostOpportunitiesResponse.json
+
+/opportunities/{id}:
+  uriParameters:
+    id:
+      type: integer
+      required: true
+  get:
+    description: "Retrieve a specific opportunities by ID"
+    displayName: "Get Opportunities"
+    responses:
+      200:
+        body:
+          application/json:
+            type: !include resources/schemas/GetOpportunitiesIdResponse.raml
+            example: !include resources/examples/GetOpportunitiesIdResponse.json
+  put:
+    description: "Update an existing opportunities"
+    displayName: "Update Opportunities"
+    body:
+      application/json:
+        type: !include resources/schemas/PutOpportunitiesIdRequest.raml
+        example: !include resources/examples/PutOpportunitiesIdRequest.json
+    responses:
+      200:
+        body:
+          application/json:
+            type: !include resources/schemas/PutOpportunitiesIdResponse.raml
+            example: !include resources/examples/PutOpportunitiesIdResponse.json
+  delete:
+    description: "Delete a specific opportunities"
+    displayName: "Delete Opportunities"
+    responses:
+      200:
+        body:
+          application/json:
+            type: !include resources/schemas/DeleteOpportunitiesIdResponse.raml
+            example: !include resources/examples/DeleteOpportunitiesIdResponse.json
+
+/health:
+  get:
+    description: "Retrieve all health"
+    displayName: "Get Health"
+    responses:
+      200:
+        body:
+          application/json:
+            type: !include resources/schemas/GetHealthResponse.raml
+            example: !include resources/examples/GetHealthResponse.json

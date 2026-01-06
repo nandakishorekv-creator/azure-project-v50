@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" 
+	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" 
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="leads-test-suite.xml" />
+	<munit:test name="post-leadsTest" doc:id="4tkwn38i-xgs1-2uud-s9b8-f42ifbxnv7s" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="19jpwuhv-7wlh-jcrc-pzpb-c5p7vo5w2sp" processor="salesforce:create">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="sf-create-lead" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[{
+    "id": null,
+    "items": [
+        {
+            "exception": null,
+            "message": null,
+            "payload": {
+                "success": true,
+                "id": "001xx000003AAA",
+                "errors": []
+            },
+            "id": "001xx000003AAA",
+            "statusCode": null,
+            "successful": true
+        }
+    ],
+    "successful": true
+}]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="post-leads" doc:id="lnjdd6lv-lg01-0auk-73qm-cf0eagq52t" name="post-leads"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="bi0imf0r-7sb7-m63p-zslw-xxluz05k1rf" actual="#[payload]" expected='#[{
+  id: payload.id,
+  success: payload.success,
+  message: payload.message
+}]'/>
+		</munit:validation>
+	</munit:test>
+		<munit:test name="get-leads-by-idTest" doc:id="fg2opfv0-edbr-rnqj-3pz9-nmao73i5pbc" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="froqd4v8-ok3k-pjpx-51y0-s37uznro3m" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="sf-query-lead" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[[
+    {
+        "Id": "001xx000003AAA",
+        "Name": "Test Account",
+        "Industry": "Technology"
+    }
+]]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="get-leads-by-id" doc:id="e87ft39l-ycsx-yc34-nwxn-gqst5ukye6v" name="get-leads-by-id"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="r31p2rz5-49yq-iyyp-2if6-4c7cu3kpkrb" actual="#[payload]" expected='#[payload is Object]'/>
+		</munit:validation>
+	</munit:test>
+		<munit:test name="put-leads-by-idTest" doc:id="fv7a1iut-76py-nhj9-8o28-0ajhbskiil8n" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="fh3gl4v1-dnbi-m7tt-x2ot-meiqhv9tk7" processor="salesforce:update">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="sf-update-lead" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[[{"success": true, "id": "001xx000003AAA"}]]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="put-leads-by-id" doc:id="461rtar6-x1mz-cwaq-clbc-xydyzmcuvso" name="put-leads-by-id"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="sqxjv8zw-v206-6dt1-2dxc-mch3ngm7fxi" actual="#[payload]" expected='#[{
+  id: payload.id,
+  success: payload.success,
+  message: payload.message
+}]'/>
+		</munit:validation>
+	</munit:test>
+		<munit:test name="delete-leads-by-idTest" doc:id="nbl5he7u-dqmp-4pg0-beu4-mp4z74659g" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="612qodnl-7577-ykiv-sdg0-b3x59jsvzr" processor="salesforce:delete">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="sf-delete-lead" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[[{"success": true}]]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="delete-leads-by-id" doc:id="ktth1nyg-znqi-ny57-rb01-mvyirg57fq" name="delete-leads-by-id"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="zxikhrdv-kf86-9xlo-dhfu-ldxij4656vs" actual="#[payload]" expected='#[{
+  id: payload.id,
+  success: payload.success,
+  message: payload.message
+}]'/>
+		</munit:validation>
+	</munit:test>
+
+</mule>
