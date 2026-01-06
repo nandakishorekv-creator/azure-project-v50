@@ -6,11 +6,13 @@
       xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
       xmlns:http="http://www.mulesoft.org/schema/mule/http"
       xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-        http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+        http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+        http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd">
+
   <apikit:config name="azure-project-v50-apikit-config" raml="api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" doc:name="APIKit Router Config"></apikit:config>
 
   <flow name="azure-project-v50-api-main" doc:name="azure-project-v50 API Main" doc:id="c2e641fa-71f5-f129-5e3a-d1af4cfd7898">
-    <http:listener path="/api/${api.majorVersion}/*" config="HTTPS_Listener_config" doc:name="HTTP Listener" doc:id="9e105a23-d0a0-e7ff-92da-afbf8db5358a">
+    <http:listener path="/api/${api.majorVersion}/*" config-ref="HTTPS_Listener_config" doc:name="HTTP Listener" doc:id="9e105a23-d0a0-e7ff-92da-afbf8db5358a">
       <http:response statusCode="#[vars.httpStatus default 200]">
         <http:headers>
           #[vars.outboundHeaders default {}]
